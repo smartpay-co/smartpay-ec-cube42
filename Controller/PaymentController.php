@@ -36,8 +36,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
- * Class StripeController
- * @package Plugin\Stripe4\Controller
+ * Class SmartpayController
+ * @package Plugin\Smartpay\Controller
  *
  * @Route("/shopping/smartpay")
  */
@@ -172,11 +172,11 @@ class PaymentController extends AbstractShoppingController
 
             if (!$successURL || !$cancelURL) {
                 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-                $successURL = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/complete/{$Order->getId()}";
-                $cancelURL = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/cancel/{$Order->getId()}";    
+                $successURL = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/complete";
+                $cancelURL = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/cancel";    
             }
 
-            $params = "session={$sessionID}&key={$publicKey}&success_url={$successURL}&cancel_url={$cancelURL}";
+            $params = "session={$sessionID}&key={$publicKey}&success_url={$successURL}/{$Order->getId()}&cancel_url={$cancelURL}/{$Order->getId()}";
 
             header("Location: {$this->config->getCheckoutURL()}/login?{$params}");
             exit;

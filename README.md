@@ -7,7 +7,7 @@ This is a plug-in that allows you to make credit card payments with Smartpay on 
 Clone plugin from GitHub
 
 ```
-git clone https://github.com/smartpay-co/eccube app/Plugin
+git clone git@github.com:smartpay-co/eccube.git app/Plugin/Smartpay
 ```
 
 Install and enable the plugin in your app

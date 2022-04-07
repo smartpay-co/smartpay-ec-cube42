@@ -146,8 +146,6 @@ class PaymentController extends AbstractShoppingController
         };
 
         try {
-            $publicKey = getenv('SMARTPAY_PUBLIC_KEY');
-            $secretKey = getenv('SMARTPAY_SECRET_KEY');
             $url = "{$this->config->getAPIPrefix()}/checkout-sessions";
             $lineItems = array_map($transformProductItems, $Order->getProductOrderItems());
 

@@ -134,18 +134,15 @@ class PaymentController extends AbstractShoppingController
         // Build request body
         $transformProductItems = function ($product) {
             $description = "{$product->getClassCategoryName1()}{$product->getClassCategoryName2()}";
+
             return [
-                'priceData' => [
-                    'productData' => [
-                        'name' => $product->getProductName(),
-                    ] + (empty($description) ? [] : [
-                        'description' => $description
-                    ]),
-                    'amount' => $product->getTotalPrice(),
-                    'currency' => $product->getCurrencyCode(),
-                ],
+                'name' => $product->getProductName(),
+                'amount' => $product->getTotalPrice(),
+                'currency' => $product->getCurrencyCode(),
                 'quantity' => $product->getQuantity(),
-            ];
+            ] + (empty($description) ? [] : [
+                'productDescription' => $description
+            ]);
         };
 
         try {
@@ -155,8 +152,6 @@ class PaymentController extends AbstractShoppingController
             $lineItems = array_map($transformProductItems, $Order->getProductOrderItems());
 
             $data = [
-                'successUrl' => $successUrl,
-                'cancelUrl' => $cancelUrl,
                 'customerInfo' => [
                     "emailAddress" => $Order->getEmail(),
                     "firstName" => $Order->getName02(),
@@ -171,25 +166,26 @@ class PaymentController extends AbstractShoppingController
                         "locality" => "",
                     ],
                 ],
-                'orderData' => [
-                    'amount' => $Order->getTotalPrice(),
-                    'currency' => $Order->getCurrencyCode(),
-                    'lineItemData' => $lineItems,
-                    'shippingInfo' => [
-                        'address' =>  [
-                            'line1' => $Order->getAddr01(),
-                            'line2' => $Order->getAddr02(),
-                            'locality' => 'locality',
-                            'postalCode' => $Order->getPostalCode(),
-                            'country' => 'JP'
-                        ],
+                'amount' => $Order->getTotalPrice(),
+                'currency' => $Order->getCurrencyCode(),
+                'items' => $lineItems,
+                'shippingInfo' => [
+                    'address' =>  [
+                        'line1' => $Order->getAddr01(),
+                        'line2' => $Order->getAddr02(),
+                        'locality' => 'locality',
+                        'postalCode' => $Order->getPostalCode(),
+                        'country' => 'JP'
                     ],
                 ],
+                'reference' => "{$Order->getId()}",
+                'successUrl' => $successUrl,
+                'cancelUrl' => $cancelUrl,
             ];
 
             if ($Order->getDeliveryFeeTotal() > 0) {
-                $data['orderData']['shippingInfo']['feeAmount'] = $Order->getDeliveryFeeTotal();
-                $data['orderData']['shippingInfo']['feeCurrency'] = $Order->getCurrencyCode();
+                $data['shippingInfo']['feeAmount'] = $Order->getDeliveryFeeTotal();
+                $data['shippingInfo']['feeCurrency'] = $Order->getCurrencyCode();
             }
 
             function httpPost($url, $data)

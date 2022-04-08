@@ -53,14 +53,6 @@ if (!class_exists('\Plugin\Smartpay\Entity\Config', false)) {
         }
 
         /**
-         * @return string
-         */
-        public function getCheckoutURL()
-        {
-            return $this->checkout_url;
-        }
-
-        /**
          * @param string $api_id
          *
          * @return $this;
@@ -80,18 +72,6 @@ if (!class_exists('\Plugin\Smartpay\Entity\Config', false)) {
         public function setAPIPrefix($api_prefix)
         {
             $this->api_prefix = $api_prefix;
-
-            return $this;
-        }
-
-        /**
-         * @param string $checkout_url
-         *
-         * @return $this;
-         */
-        public function setCheckoutURL($checkout_url)
-        {
-            $this->checkout_url = $checkout_url;
 
             return $this;
         }

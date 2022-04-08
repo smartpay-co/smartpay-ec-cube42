@@ -93,8 +93,7 @@ class PaymentController extends AbstractShoppingController
         PaymentStatusRepository $paymentStatusRepository,
         ConfigRepository $configRepository,
         ParameterBag $parameterBag
-    )
-    {
+    ) {
         $this->cartService = $cartService;
         $this->orderHelper = $orderHelper;
         $this->eccubeConfig = $eccubeConfig;
@@ -111,7 +110,7 @@ class PaymentController extends AbstractShoppingController
      * @throws \Smartpay\Exception\ApiErrorException
      *
      * @Route("/payment", name="shopping_smartpay_payment")
-    */
+     */
     public function payment(): RedirectResponse
     {
         // 受注情報の取得
@@ -123,42 +122,34 @@ class PaymentController extends AbstractShoppingController
         }
 
         // Build redirect URL params
-        $successURL = getenv('SMARTPAY_SUCCESS_URL');
-        $cancelURL = getenv('SMARTPAY_CANCEL_URL');
+        $successUrl = getenv('SMARTPAY_SUCCESS_URL');
+        $cancelUrl = getenv('SMARTPAY_CANCEL_URL');
 
-        if (!$successURL || !$cancelURL) {
+        if (!$successUrl || !$cancelUrl) {
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-            $successURL = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/complete/{$Order->getId()}";
-            $cancelURL = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/cancel/{$Order->getId()}"; 
+            $successUrl = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/complete/{$Order->getId()}";
+            $cancelUrl = "{$protocol}{$_SERVER['HTTP_HOST']}/shopping/smartpay/payment/cancel/{$Order->getId()}";
         }
 
         // Build request body
-        $transformProductItems = function($product)
-        {
+        $transformProductItems = function ($product) {
             $description = "{$product->getClassCategoryName1()}{$product->getClassCategoryName2()}";
+
             return [
-                'priceData' => [
-                    'productData' => [
-                        'name' => $product->getProductName(),
-                    ] + (empty($description) ? [] : [
-                        'description' => $description
-                    ]),
-                    'amount' => $product->getTotalPrice(),
-                    'currency' => $product->getCurrencyCode(),
-                ],
+                'name' => $product->getProductName(),
+                'amount' => $product->getTotalPrice(),
+                'currency' => $product->getCurrencyCode(),
                 'quantity' => $product->getQuantity(),
-            ];
+            ] + (empty($description) ? [] : [
+                'productDescription' => $description
+            ]);
         };
 
         try {
-            $publicKey = getenv('SMARTPAY_PUBLIC_KEY');
-            $secretKey = getenv('SMARTPAY_SECRET_KEY');
             $url = "{$this->config->getAPIPrefix()}/checkout-sessions";
             $lineItems = array_map($transformProductItems, $Order->getProductOrderItems());
 
             $data = [
-                'successUrl' => $successURL,
-                'cancelUrl' => $cancelURL,
                 'customerInfo' => [
                     "emailAddress" => $Order->getEmail(),
                     "firstName" => $Order->getName02(),
@@ -173,28 +164,30 @@ class PaymentController extends AbstractShoppingController
                         "locality" => "",
                     ],
                 ],
-                'orderData' => [
-                    'amount' => $Order->getTotalPrice(),
-                    'currency' => $Order->getCurrencyCode(),
-                    'lineItemData' => $lineItems,
-                    'shippingInfo' => [
-                        'address' =>  [
-                            'line1' => $Order->getAddr01(),
-                            'line2' => $Order->getAddr02(),
-                            'locality' => 'locality',
-                            'postalCode' => $Order->getPostalCode(),
-                            'country' => 'JP'
-                        ],
+                'amount' => $Order->getTotalPrice(),
+                'currency' => $Order->getCurrencyCode(),
+                'items' => $lineItems,
+                'shippingInfo' => [
+                    'address' =>  [
+                        'line1' => $Order->getAddr01(),
+                        'line2' => $Order->getAddr02(),
+                        'locality' => 'locality',
+                        'postalCode' => $Order->getPostalCode(),
+                        'country' => 'JP'
                     ],
                 ],
+                'reference' => "{$Order->getId()}",
+                'successUrl' => $successUrl,
+                'cancelUrl' => $cancelUrl,
             ];
 
             if ($Order->getDeliveryFeeTotal() > 0) {
-                $data['orderData']['shippingInfo']['feeAmount'] = $Order->getDeliveryFeeTotal();
-                $data['orderData']['shippingInfo']['feeCurrency'] = $Order->getCurrencyCode();
+                $data['shippingInfo']['feeAmount'] = $Order->getDeliveryFeeTotal();
+                $data['shippingInfo']['feeCurrency'] = $Order->getCurrencyCode();
             }
 
-            function httpPost($url, $data){
+            function httpPost($url, $data)
+            {
                 $secretKey = getenv('SMARTPAY_SECRET_KEY');
                 $curl = curl_init($url);
                 $authorization = "Authorization: Basic {$secretKey}";
@@ -203,7 +196,7 @@ class PaymentController extends AbstractShoppingController
                 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
                     'Accept: application/json',
-                    'Content-Type: application/json' ,
+                    'Content-Type: application/json',
                     $authorization
                 ));
                 curl_setopt($curl, CURLOPT_ENCODING, 'gzip,deflate,sdch');
@@ -216,7 +209,7 @@ class PaymentController extends AbstractShoppingController
             $sessionID = $checkoutSession['id'];
             $Order->setSmartpayPaymentCheckoutID($sessionID);
 
-            header("Location: {$this->config->getCheckoutURL()}/login?session-id={$sessionID}&public-key={$publicKey}");
+            header("Location: {$checkoutSession['url']}");
             exit;
         } catch (\Exception $e) {
             $this->addError($e->getMessage());
@@ -275,7 +268,7 @@ class PaymentController extends AbstractShoppingController
                 $this->addError('受注情報が存在しません');
                 return $this->redirectToRoute('shopping_error');
             }
-            
+
             $OrderStatus = $this->orderStatusRepository->find(OrderStatus::PROCESSING);
             $Order->setOrderStatus($OrderStatus);
 

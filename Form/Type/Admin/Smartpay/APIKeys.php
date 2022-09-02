@@ -5,7 +5,7 @@
  *
  * Copyright(c) Smartpay Solutions PTE. LTD. All Rights Reserved.
  *
- * https://homepage.smartpay.ninja/
+ * https://smartpay.co
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.

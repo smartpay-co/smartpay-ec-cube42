@@ -201,7 +201,15 @@ class PaymentController extends AbstractShoppingController
                 ));
                 curl_setopt($curl, CURLOPT_ENCODING, 'gzip,deflate,sdch');
                 $response = curl_exec($curl);
+                $httpcode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
                 curl_close($curl);
+                if ($httpcode != 200) {
+                    log_error("[Smartpay] POST ${url} ${httpcode}", array(
+                        'payload' => $data,
+                        'response' => $response
+                    ));
+                    throw new \Exception("システム管理者に連絡してください");
+                }
                 return json_decode($response, true);
             }
 

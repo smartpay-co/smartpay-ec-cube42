@@ -132,22 +132,47 @@ class PaymentController extends AbstractShoppingController
         }
 
         // Build request body
-        $transformProductItems = function ($product) {
-            $description = "{$product->getClassCategoryName1()}{$product->getClassCategoryName2()}";
+        $transformItems = function ($item) {
+            if ($item->isDiscount()) {
+                return [
+                    'kind' => 'discount',
+                    'name' => 'Discount',
+                    'amount' => -1 * $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                ];
+            } else if ($item->isPoint()) {
+                return [
+                    'kind' => 'discount',
+                    'name' => 'Point',
+                    'amount' => -1 * $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                ];
+            } else if ($item->isTax()) {
+                return [
+                    'kind' => 'tax',
+                    'name' => 'Tax',
+                    'amount' => $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                ];
+            } else if ($item->isDeliveryFee()) {
+                return Null;
+            } else {
+                $description = "{$item->getClassCategoryName1()}{$item->getClassCategoryName2()}";
 
-            return [
-                'name' => $product->getProductName(),
-                'amount' => $product->getTotalPrice(),
-                'currency' => $product->getCurrencyCode(),
-                'quantity' => $product->getQuantity(),
-            ] + (empty($description) ? [] : [
-                'productDescription' => $description
-            ]);
+                return [
+                    'name' => $item->getProductName() || '',
+                    'amount' => $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                    'quantity' => $item->getQuantity(),
+                ] + (empty($description) ? [] : [
+                    'productDescription' => $description
+                ]);
+            }
         };
 
         try {
             $url = "{$this->config->getAPIPrefix()}/checkout-sessions";
-            $lineItems = array_map($transformProductItems, $Order->getProductOrderItems());
+            $lineItems = array_filter(array_map($transformItems, $Order->getOrderItems()));
 
             $data = [
                 'customerInfo' => [

@@ -156,10 +156,10 @@ class PaymentController extends AbstractShoppingController
                 ];
             } else if ($item->isDeliveryFee()) {
                 return null;
-            } else if ($item->isProduct()) {
+            } else if ($item->isProduct() || $item->isCharge()) {
                 $description = "{$item->getClassCategoryName1()}{$item->getClassCategoryName2()}";
                 return [
-                    'name' => $item->getProductName(),
+                    'name' => $item->getProductName() ?: 'Item',
                     'amount' => $item->getPriceIncTax(),
                     'currency' => $item->getCurrencyCode(),
                     'quantity' => $item->getQuantity(),

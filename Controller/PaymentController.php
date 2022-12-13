@@ -155,25 +155,26 @@ class PaymentController extends AbstractShoppingController
                     'currency' => $item->getCurrencyCode(),
                 ];
             } else if ($item->isDeliveryFee()) {
-                return Null;
-            } else {
+                return null;
+            } else if ($item->isProduct()) {
                 $description = "{$item->getClassCategoryName1()}{$item->getClassCategoryName2()}";
-
                 return [
-                    'name' => $item->getProductName() || '',
+                    'name' => $item->getProductName(),
                     'amount' => $item->getPriceIncTax(),
                     'currency' => $item->getCurrencyCode(),
                     'quantity' => $item->getQuantity(),
                 ] + (empty($description) ? [] : [
                     'productDescription' => $description
                 ]);
+            } else {
+                log_error("Unhandled item type: {$item->getOrderItemType()}");
+                return null;
             }
         };
 
         try {
             $url = "{$this->config->getAPIPrefix()}/checkout-sessions";
-            $lineItems = array_filter(array_map($transformItems, $Order->getOrderItems()));
-
+            $lineItems = array_values(array_filter(array_map($transformItems, $Order->getOrderItems()->getValues())));
             $data = [
                 'customerInfo' => [
                     "emailAddress" => $Order->getEmail(),
@@ -189,7 +190,7 @@ class PaymentController extends AbstractShoppingController
                         "locality" => "",
                     ],
                 ],
-                'amount' => $Order->getTotalPrice(),
+                'amount' => $Order->getPaymentTotal(),
                 'currency' => $Order->getCurrencyCode(),
                 'items' => $lineItems,
                 'shippingInfo' => [

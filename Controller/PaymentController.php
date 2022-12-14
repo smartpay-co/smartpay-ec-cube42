@@ -176,7 +176,9 @@ class PaymentController extends AbstractShoppingController
             $url = "{$this->config->getAPIPrefix()}/checkout-sessions";
             $orderItems = $Order->getOrderItems()->getValues();
             // Sort by \Eccube\Entity\Master\OrderItemType so Product appears before of Charge
-            usort($orderItems, function($a, $b) { return ($a->getOrderItemTypeId() < $b->getOrderItemTypeId());});
+            usort($orderItems, function ($a, $b) {
+                return ($a->getOrderItemTypeId() > $b->getOrderItemTypeId());
+            });
             $lineItems = array_values(array_filter(array_map($transformItems, $orderItems)));
             $data = [
                 'customerInfo' => [

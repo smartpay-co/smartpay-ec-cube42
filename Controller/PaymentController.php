@@ -132,23 +132,54 @@ class PaymentController extends AbstractShoppingController
         }
 
         // Build request body
-        $transformProductItems = function ($product) {
-            $description = "{$product->getClassCategoryName1()}{$product->getClassCategoryName2()}";
-
-            return [
-                'name' => $product->getProductName(),
-                'amount' => $product->getTotalPrice(),
-                'currency' => $product->getCurrencyCode(),
-                'quantity' => $product->getQuantity(),
-            ] + (empty($description) ? [] : [
-                'productDescription' => $description
-            ]);
+        $transformItems = function ($item) {
+            if ($item->isDiscount()) {
+                return [
+                    'kind' => 'discount',
+                    'name' => 'Discount',
+                    'amount' => -1 * $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                ];
+            } else if ($item->isPoint()) {
+                return [
+                    'kind' => 'discount',
+                    'name' => 'Point',
+                    'amount' => -1 * $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                ];
+            } else if ($item->isTax()) {
+                return [
+                    'kind' => 'tax',
+                    'name' => 'Tax',
+                    'amount' => $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                ];
+            } else if ($item->isDeliveryFee()) {
+                return null;
+            } else if ($item->isProduct() || $item->isCharge()) {
+                $description = "{$item->getClassCategoryName1()}{$item->getClassCategoryName2()}";
+                return [
+                    'name' => $item->getProductName() ?: 'Item',
+                    'amount' => $item->getPriceIncTax(),
+                    'currency' => $item->getCurrencyCode(),
+                    'quantity' => $item->getQuantity(),
+                ] + (empty($description) ? [] : [
+                    'productDescription' => $description
+                ]);
+            } else {
+                log_error("Unhandled item type: {$item->getOrderItemType()}");
+                return null;
+            }
         };
 
         try {
             $url = "{$this->config->getAPIPrefix()}/checkout-sessions";
-            $lineItems = array_map($transformProductItems, $Order->getProductOrderItems());
-
+            $orderItems = $Order->getOrderItems()->getValues();
+            // Sort by \Eccube\Entity\Master\OrderItemType so Product appears before of Charge
+            usort($orderItems, function ($a, $b) {
+                return ($a->getOrderItemTypeId() <=> $b->getOrderItemTypeId());
+            });
+            $lineItems = array_values(array_filter(array_map($transformItems, $orderItems)));
             $data = [
                 'customerInfo' => [
                     "emailAddress" => $Order->getEmail(),
@@ -164,7 +195,7 @@ class PaymentController extends AbstractShoppingController
                         "locality" => "",
                     ],
                 ],
-                'amount' => $Order->getTotalPrice(),
+                'amount' => $Order->getPaymentTotal(),
                 'currency' => $Order->getCurrencyCode(),
                 'items' => $lineItems,
                 'shippingInfo' => [

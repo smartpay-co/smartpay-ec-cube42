@@ -1,69 +1,68 @@
 # nav
-smartpay.admin.nav.payment_list: '決済状況一覧'
+smartpay.admin.nav.payment_list: "決済状況一覧"
 
 # flash messages
-smartpay.admin.save.success: '登録しました。'
-smartpay.admin.save.failed: '登録に失敗しました。'
-smartpay.admin.order.cancel.success: '取消処理を行いました。'
-smartpay.admin.order.change_price.success: '取消処理を行いました。'
-smartpay.admin.payment_status.bulk_action.success: '%count%件を処理しました。'
-smartpay.admin.payment_status.bulk_action.error: '%count%件を失敗しました。'
+smartpay.admin.save.success: "登録しました。"
+smartpay.admin.save.failed: "登録に失敗しました。"
+smartpay.admin.order.cancel.success: "取消処理を行いました。"
+smartpay.admin.order.change_price.success: "取消処理を行いました。"
+smartpay.admin.payment_status.bulk_action.success: "%count%件を処理しました。"
+smartpay.admin.payment_status.bulk_action.error: "%count%件を失敗しました。"
 
 # twig
-smartpay.admin.config.title: 'Smartpay管理'
-smartpay.admin.config.sub_title: 'プラグイン一覧'
-smartpay.admin.config.header: '設定'
-smartpay.admin.config.api_key.title: 'APIキー設定'
-smartpay.admin.config.save: '登録'
-smartpay.admin.config.required: '必須'
-smartpay.admin.config.back: 'プラグイン一覧'
-smartpay.admin.config.capture: '決済処理方法'
-smartpay.admin.config.api_url: 'API URL'
-smartpay.admin.config.api_id: 'API ID'
-smartpay.admin.config.api_password: 'API パスワード'
-smartpay.admin.order_edit.title: '決済情報'
-smartpay.admin.order_edit.cvs_title: 'コンビニ決済情報'
-smartpay.admin.order_edit.payment_status: '決済種別'
-smartpay.admin.order_edit.cvs_payment_status: 'コンビニ決済状況'
-smartpay.admin.order_edit.cvs_type: 'コンビニ種別'
-smartpay.admin.order_edit.payment_action: '決済操作'
-smartpay.admin.order_edit.payment_action_cancel: '取消実行'
-smartpay.admin.order_edit.payment_action_change_price: '金額変更'
-smartpay.admin.payment_status.title: '決済状況一覧'
-smartpay.admin.payment_status.sub_title: '受注管理'
-smartpay.admin.payment_status.search: '検索'
-smartpay.admin.payment_status.search_result_count: '検索結果：%count%件が該当しました'
-smartpay.admin.payment_status.search_condition_payment: '支払方法'
-smartpay.admin.payment_status.search_condition_order_status: '対応状況'
-smartpay.admin.payment_status.search_condition_payment_status: '決済状況'
-smartpay.admin.payment_status.invalid_condition: '検索条件に誤りがあります'
-smartpay.admin.payment_status.no_result: '検索条件に合致するデータが見つかりませんでした'
-smartpay.admin.payment_status.change_condition: '検索条件を変えて、再度検索をお試しください。'
-smartpay.admin.payment_status.display_count: '%count%件'
-smartpay.admin.payment_status.col_order_date: '受注日時'
-smartpay.admin.payment_status.col_order_no: '注文番号'
-smartpay.admin.payment_status.col_order_name: 'お名前'
-smartpay.admin.payment_status.col_order_payment: '支払方法'
-smartpay.admin.payment_status.col_order_price: '購入金額'
-smartpay.admin.payment_status.col_order_staus: '対応状況'
-smartpay.admin.payment_status.bulk_label: '一括操作'
-smartpay.admin.payment_status.bulk_submit: '決定'
-smartpay.admin.payment_status.bulk_modal_title: '一括操作の確認'
-smartpay.admin.payment_status.bulk_modal_body: '複数の項目を変更します。実行してよろしいですか'
-smartpay.admin.payment_status.bulk_modal_action_exec: '実行'
-smartpay.admin.payment_status.bulk_modal_action_cancel: 'キャンセル'
-smartpay.admin.payment_status.bulk_alert: '選択されていません'
-smartpay.shopping.checkout.error: 'カード決済に失敗しました。'
-smartpay.shopping.checkout.error.secret_key: 'シークレットキーが無効です。'
-smartpay.shopping.checkout.error.public_key: '公開可能キーが無効です。'
-smartpay.shopping.verify.error: 'カードを利用することができません。'
-smartpay.shopping.cvs.error: 'コンビニ決済に失敗しました。'
+smartpay.admin.config.title: "Smartpay管理"
+smartpay.admin.config.sub_title: "プラグイン一覧"
+smartpay.admin.config.header: "設定"
+smartpay.admin.config.api_key.title: "APIキー設定"
+smartpay.admin.config.callback_url.title: "コールバックURL"
+smartpay.admin.config.save: "登録"
+smartpay.admin.config.required: "必須"
+smartpay.admin.config.back: "プラグイン一覧"
+smartpay.admin.config.capture: "決済処理方法"
+smartpay.admin.config.api_url: "API URL"
+smartpay.admin.config.api_id: "API ID"
+smartpay.admin.config.api_password: "API パスワード"
+smartpay.admin.order_edit.title: "決済情報"
+smartpay.admin.order_edit.cvs_title: "コンビニ決済情報"
+smartpay.admin.order_edit.payment_status: "決済種別"
+smartpay.admin.order_edit.cvs_payment_status: "コンビニ決済状況"
+smartpay.admin.order_edit.cvs_type: "コンビニ種別"
+smartpay.admin.order_edit.payment_action: "決済操作"
+smartpay.admin.order_edit.payment_action_cancel: "取消実行"
+smartpay.admin.order_edit.payment_action_change_price: "金額変更"
+smartpay.admin.payment_status.title: "決済状況一覧"
+smartpay.admin.payment_status.sub_title: "受注管理"
+smartpay.admin.payment_status.search: "検索"
+smartpay.admin.payment_status.search_result_count: "検索結果：%count%件が該当しました"
+smartpay.admin.payment_status.search_condition_payment: "支払方法"
+smartpay.admin.payment_status.search_condition_order_status: "対応状況"
+smartpay.admin.payment_status.search_condition_payment_status: "決済状況"
+smartpay.admin.payment_status.invalid_condition: "検索条件に誤りがあります"
+smartpay.admin.payment_status.no_result: "検索条件に合致するデータが見つかりませんでした"
+smartpay.admin.payment_status.change_condition: "検索条件を変えて、再度検索をお試しください。"
+smartpay.admin.payment_status.display_count: "%count%件"
+smartpay.admin.payment_status.col_order_date: "受注日時"
+smartpay.admin.payment_status.col_order_no: "注文番号"
+smartpay.admin.payment_status.col_order_name: "お名前"
+smartpay.admin.payment_status.col_order_payment: "支払方法"
+smartpay.admin.payment_status.col_order_price: "購入金額"
+smartpay.admin.payment_status.col_order_staus: "対応状況"
+smartpay.admin.payment_status.bulk_label: "一括操作"
+smartpay.admin.payment_status.bulk_submit: "決定"
+smartpay.admin.payment_status.bulk_modal_title: "一括操作の確認"
+smartpay.admin.payment_status.bulk_modal_body: "複数の項目を変更します。実行してよろしいですか"
+smartpay.admin.payment_status.bulk_modal_action_exec: "実行"
+smartpay.admin.payment_status.bulk_modal_action_cancel: "キャンセル"
+smartpay.admin.payment_status.bulk_alert: "選択されていません"
+smartpay.shopping.checkout.error: "カード決済に失敗しました。"
+smartpay.shopping.checkout.error.secret_key: "シークレットキーが無効です。"
+smartpay.shopping.checkout.error.public_key: "公開可能キーが無効です。"
+smartpay.shopping.verify.error: "カードを利用することができません。"
+smartpay.shopping.cvs.error: "コンビニ決済に失敗しました。"
 
+smartpay.admin.nav.config: "設定"
+smartpay.admin.capture.actual_sales: "仮実同時処理"
+smartpay.admin.capture.provisional_sales: "仮売上処理"
+smartpay.shopping.order_not_found: "注文情報が見つかりません"
 
-smartpay.admin.nav.config: '設定'
-smartpay.admin.capture.actual_sales: '仮実同時処理'
-smartpay.admin.capture.provisional_sales: '仮売上処理'
-smartpay.shopping.order_not_found: '注文情報が見つかりません'
-
-
-smartpay.admin.order.edit.payment_indent.label: 'Smartpay ID'
+smartpay.admin.order.edit.payment_indent.label: "Smartpay ID"

@@ -14,8 +14,8 @@ jobs:
       - name: action-zip
         uses: montudor/action-zip@v1.0.0  
         with:
-          args: zip -qq -r smartpay-ec-cube-${{ github.ref_name }}.zip . -x "./.git/*" "./.github/*"
+          args: zip -qq -r smartpay-ec-cube42-${{ github.ref_name }}.zip . -x "./.git/*" "./.github/*"
       - name: Release
         uses: softprops/action-gh-release@v0.1.14
         with:
-          files: smartpay-ec-cube-${{ github.ref_name }}.zip
+          files: smartpay-ec-cube42-${{ github.ref_name }}.zip

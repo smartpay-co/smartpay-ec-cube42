@@ -15,7 +15,7 @@ namespace Plugin\Smartpay\Repository;
 
 use Eccube\Repository\AbstractRepository;
 use Plugin\Smartpay\Entity\PaymentStatus;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry as RegistryInterface;
 
 class PaymentStatusRepository extends AbstractRepository
 {

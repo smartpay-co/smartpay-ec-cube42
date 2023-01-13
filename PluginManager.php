@@ -32,7 +32,7 @@ class PluginManager extends AbstractPluginManager
 
     private function createSmartpayPayment(ContainerInterface $container)
     {
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $container->get('doctrine')->getManager();
         $paymentRepository = $entityManager->getRepository(Payment::class);
 
         $Payment = $paymentRepository->findOneBy([], ['sort_no' => 'DESC']);
@@ -56,7 +56,7 @@ class PluginManager extends AbstractPluginManager
 
     private function createConfig(ContainerInterface $container)
     {
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $container->get('doctrine')->getManager();
         $Config = $entityManager->find(Config::class, 1);
         if ($Config) {
             return;
@@ -72,7 +72,7 @@ class PluginManager extends AbstractPluginManager
 
     private function createMasterData(ContainerInterface $container, array $statuses, $class)
     {
-        $entityManager = $container->get('doctrine.orm.entity_manager');
+        $entityManager = $container->get('doctrine')->getManager();
         $i = 0;
         foreach ($statuses as $id => $name) {
             $PaymentStatus = $entityManager->find($class, $id);

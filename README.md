@@ -9,7 +9,7 @@ For EC-CUBE 4.0 & 4.1, please refer to https://github.com/smartpay-co/ec-cube
 Clone plugin from GitHub
 
 ```
-git clone git@github.com:smartpay-co/eccube.git app/Plugin/Smartpay
+git clone git@github.com:smartpay-co/smartpay-ec-cube42.git app/Plugin/Smartpay
 ```
 
 Install and enable the plugin in your app

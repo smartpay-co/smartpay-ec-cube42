@@ -19,7 +19,7 @@ use Eccube\Repository\PaymentRepository;
 use Plugin\Smartpay\Entity\Config;
 use Plugin\Smartpay\Service\Method\Smartpay;
 use Plugin\Smartpay\Entity\PaymentStatus;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class PluginManager extends AbstractPluginManager
 {

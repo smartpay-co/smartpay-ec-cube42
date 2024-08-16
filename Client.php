@@ -36,7 +36,7 @@ class Client
         $httpCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         curl_close($curl);
         if ($httpCode != 200) {
-            log_error("[Smartpay] GET ${url} ${httpCode}", array(
+            log_error("[Smartpay] GET {$url} {$httpCode}", array(
                 'response' => $response
             ));
             throw new Exception("システム管理者に連絡してください");
@@ -56,7 +56,7 @@ class Client
         $httpCode = curl_getinfo($curl, CURLINFO_RESPONSE_CODE);
         curl_close($curl);
         if ($httpCode != 200) {
-            log_error("[Smartpay] POST ${url} ${httpCode}", array(
+            log_error("[Smartpay] POST {$url} {$httpCode}", array(
                 'payload' => $data,
                 'response' => $response
             ));

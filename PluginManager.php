@@ -19,7 +19,7 @@ use Eccube\Repository\PaymentRepository;
 use Plugin\Smartpay\Entity\Config;
 use Plugin\Smartpay\Service\Method\Smartpay;
 use Plugin\Smartpay\Entity\PaymentStatus;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 class PluginManager extends AbstractPluginManager
 {
@@ -63,7 +63,6 @@ class PluginManager extends AbstractPluginManager
         }
 
         $Config = new Config();
-        $Config->setApiId('smartpay-api-id');
         $Config->setAPIPrefix(env('SMARTPAY_API_URL') ?: 'https://api.smartpay.co/v1');
 
         $entityManager->persist($Config);

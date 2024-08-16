@@ -46,18 +46,6 @@ if (!class_exists('\Plugin\Smartpay\Entity\Config', false)) {
         }
 
         /**
-         * @param string $api_id
-         *
-         * @return $this;
-         */
-        public function setApiId($api_id)
-        {
-            $this->api_id = $api_id;
-
-            return $this;
-        }
-
-        /**
          * @param string $api_prefix
          *
          * @return $this;

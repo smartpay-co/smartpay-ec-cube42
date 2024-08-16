@@ -63,7 +63,6 @@ class PluginManager extends AbstractPluginManager
         }
 
         $Config = new Config();
-        $Config->setApiId('smartpay-api-id');
         $Config->setAPIPrefix(env('SMARTPAY_API_URL') ?: 'https://api.smartpay.co/v1');
 
         $entityManager->persist($Config);

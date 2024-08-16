@@ -1,0 +1,5 @@
+parameters:
+  level: 1
+  excludePaths:
+    - Util/Base62/*
+    - Util/Base62.php

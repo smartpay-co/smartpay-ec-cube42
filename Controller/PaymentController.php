@@ -314,9 +314,9 @@ class PaymentController extends AbstractShoppingController
             }
 
             // Check if the order waiting for payment
-            if ($Order->getSmartpayPaymentStatus()->getId() != PaymentStatus::ENABLED) {
-                log_error("[Smartpay Webhook] Order {$id} is not waiting for payment, skipping...");
-                return new JsonResponse(['error' => 'ECCUBE order is not waiting for payment.'], 200);
+            if ($Order->getSmartpayPaymentStatus() === null || $Order->getSmartpayPaymentStatus()->getId() != PaymentStatus::ENABLED) {
+                log_error("[Smartpay Webhook] Order {$id} is not waiting for payment or has no payment status, skipping...");
+                return new JsonResponse(['error' => 'ECCUBE order is not waiting for payment or has no payment status.'], 200);
             }
 
             // Double check if the reference order is correct
